@@ -1,7 +1,7 @@
 'use strict';
 
 const logins = ["Mango", "robotGoogles", "Poly", "Aj4x1sBozz", "qwerty123"];
-const login = "testlogin";
+const login = "Poly";
 //const login = prompt("Введите логин", );
 
 function isLoginValid(login){
@@ -9,11 +9,11 @@ function isLoginValid(login){
 }
 
 function isLoginUnique(logins, login){
-    for (let loginItem of logins){
-        if (loginItem === login) {
+
+    if (logins.includes(login)) {
             return false
         }
-    }
+
     return true
 }
 
