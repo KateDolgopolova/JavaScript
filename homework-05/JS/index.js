@@ -161,7 +161,8 @@ console.log(getInactiveUsers(users)); // [объект Moore Hensley, объек
 
 const getUserByEmail = (arr, email) => {
     return arr.find(function (elem, i, arr) {
-        if (elem.email === email){return elem.name;}
+        if (elem.email === email){
+            return elem.name;}
     }).name;
 };
 
@@ -195,22 +196,18 @@ console.log(getTotalBalance(users)); // 20916
 
 /**
 * Массив имен всех пользователей у которых есть друг с указанным именем
+ *
+ *
 */
+
+
 const getUsersByFriend = (arr, name) => {
-
-    let friendlies = [];
-
-    arr
-        .filter(function (elem) {
-            for (let key in elem.friends) {
-                return elem.friends[key] === name;
-            }
-        })
-        .forEach(function (element) {
-            friendlies.push(element.name)
-        });
-
-    return friendlies;
+    return arr.reduce(function(prev, curr) {
+        if (curr.friends.includes(name)){
+            return [...prev , curr.name]
+        }
+        else return prev;
+    }, []);
 };
 
 console.log(getUsersByFriend(users, 'Briana Decker')); // [ 'Sharlene Bush', 'Sheree Anthony' ]
