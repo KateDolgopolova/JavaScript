@@ -36,10 +36,12 @@ class Hamburger {
      * @param {String} topping - Тип добавки
      */
     addTopping(topping) {
-        for (let i = 0; i < arguments.length; i++) {
-            this._toppings.push(arguments[i]);
-        }
-    }
+      const toppings = this._toppings.includes(topping);
+      if (!toppings){
+          this._toppings.push(topping);
+      }
+
+          }
 
     /**
      * Убрать topping, при условии, что она ранее была добавлена
@@ -59,7 +61,6 @@ class Hamburger {
     getToppings() {
        return this._toppings;
     }
-
     /**
      * Узнать размер гамбургера
      * @returns {String} - размер гамбургера
@@ -82,10 +83,7 @@ class Hamburger {
      *
      * Попробуйте сделать это геттером чтобы можно было обращаться как obj.price и нам вернет сумму.
      */
-    getPrice(){
-
-    }
-    calculatePrice() {
+       calculatePrice() {
         let price = 0;
         price = price + Hamburger.SIZES[this._size].price;
         price = price + this._toppings.reduce(function (total, current) {
