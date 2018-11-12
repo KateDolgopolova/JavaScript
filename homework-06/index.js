@@ -48,10 +48,18 @@ class Hamburger {
      * @param {String} topping - Тип добавки
      */
     removeTopping(topping) {
+        const toppings = this._toppings.includes(topping);
+        this._toppings = this._toppings.filter(function (elem) {
+            return elem !== topping;
+            }
+        )};
+
+    /*
         if(this._toppings.indexOf(topping) !== -1){
             this._toppings.splice(this._toppings.indexOf(topping), 0);
         }
         }
+        */
     /**
      * Получить список toppings
      * @returns {Array} - Массив добавленных topping, содержит значения констант Hamburger.TOPPING_*
