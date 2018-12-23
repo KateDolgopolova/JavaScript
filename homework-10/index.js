@@ -55,7 +55,8 @@ function actionSelector(event){
         case "update":
             let user = {
                 name: idNameValue,
-                age: idAge,
+                age: idAgeValue,
+                id: idFieldValue
             };
             updateUser(idFieldValue, user );
         break;
@@ -71,16 +72,14 @@ function getAllUsers() {
             if(response.ok) return response.json();
             throw new Error (`Error: ${response.statusText}`);
         })
-        .then (data => console.log(data))
+        .then (response => printResults(response, "all"))
         .catch(err => {
         console.error("Error: ", err);
         })
 }
 
-//getBtn.addEventListener('submit',getAllUsers);
 
 function getUserById(idFieldValue) {
-    //let id = event.target[0].value;
     fetch(API_URL + idFieldValue, {
         method: 'get'
     })
@@ -88,12 +87,11 @@ function getUserById(idFieldValue) {
             if(response.ok) return response.json();
             throw new Error (`Error: ${response.statusText}`);
         })
-        .then (data => console.log(data.data))
-        .catch(err => {
-            console.error("Error: ", err);
-        })
+        .then (response => printResults(response, "single"))
+        .catch(err =>
+            console.error("Error: ", err)
+        )
 }
-//searchForm.addEventListener('submit', getUserById);
 
 function addUser(idNameValue, idAgeValue) {
     console.log(event)
@@ -110,7 +108,7 @@ function addUser(idNameValue, idAgeValue) {
             if(response.ok) return response.json();
             throw new Error (`Error: ${response.statusText}`);
         })
-        .then (data => console.log(data.id))
+        .then (response => printResults(response))
         .catch(err => {
             console.error("Error: ", err);
         })
@@ -129,13 +127,15 @@ function removeUser(idFieldValue) {
             if(response.ok) return response.json();
             throw new Error (`Error: ${response.statusText}`);
         })
-        .then (data => console.log(data.id))
+        .then (response => printResultsDelete(response))
         .catch(err => {
             console.error("Error: ", err);
         })
 }
 
-function updateUser(idFieldValue, user) {
+
+
+function updateUser(idFieldValue, user ) {
     fetch(API_URL + idFieldValue, {
         method: 'put',
         body: JSON.stringify(user),
@@ -148,10 +148,76 @@ function updateUser(idFieldValue, user) {
             if(response.ok) return response.json();
             throw new Error (`Error: ${response.statusText}`);
         })
-        .then (data => console.log(data.id))
+        .then (response => printResultsUpdate(response))
         .catch(err => {
             console.error("Error: ", err);
         })
 }
 
+function printResultsDelete(results) {
+    let usersResult = document.querySelector('.result');
+    console.log(results)
+    if (results.status === 200) {
+        usersResult.innerHTML = "deleted"
+    }
+    if (results.status === 404) {
+        usersResult.innerHTML = "Check data"
+    }
+}
 
+function printResultsUpdate(results) {
+    let usersResult = document.querySelector('.result');
+    console.log(results)
+    if (results.status === 200) {
+        var dataForRender;
+        dataForRender = " id: " + results.data.id + " name: " + results.data.name + " age: " + results.data.age + "</br>" ;
+    }
+
+    if (results.status === 404) {
+        dataForRender = "Check data"
+    }
+
+    usersResult.innerHTML = dataForRender
+
+}
+
+function printResults(results, amount) {
+    let usersResult = document.querySelector('.result');
+    console.log(results)
+    if (results.status === 200) {
+        let data = JSON.stringify(results.data);
+        let dataForRender = "";
+
+        if (amount === "all"){
+            for( let key in results.data){
+                dataForRender = dataForRender + " id: " + results.data[key].id + " name: " + results.data[key].name + " age: " + results.data[key].age + "</br>" ;
+            }
+            usersResult.innerHTML = dataForRender
+        } else {
+            dataForRender = dataForRender + " id: " + results.data.id + " name: " + results.data.name + " age: " + results.data.age + "</br>" ;
+            usersResult.innerHTML = dataForRender
+        }
+
+
+    }
+    if (results.status === 201) {
+        //let data = JSON.stringify(results.data);
+        //let usersResult = document.querySelector('.result');
+        let dataForRender = "";
+        dataForRender =  dataForRender + " id: " + results.data["_id"] + " name: " + results.data.name + " age: " + results.data.age + "</br>" ;
+        console.log(results.data)
+        for( let key in results){
+            //console.log(key.data)
+            //dataForRender =  dataForRender + " id: " + results.data.id + " name: " + results.data.name + " age: " + results.data.age + "</br>" ;
+        }
+        usersResult.innerHTML =dataForRender;
+    }
+
+    if (results.status === 500) {
+        let data = JSON.stringify(results.errors[0]);
+        let usersResult = document.querySelector('.result');
+        usersResult.innerHTML = data
+    }
+
+
+}
