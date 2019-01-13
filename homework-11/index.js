@@ -231,7 +231,6 @@ console.log(combinations);
                     && ((item.release_date === parseInt(combinations[combination].release_date)) || combinations[combination].release_date=== undefined)) {
                     filterdData.computers.push(item)
 
-                    // добавляешь в обьект фильтрдаты item, в конце оно ретурнится, глянь 132 строку, я поставил рендер темплейта
 
                 }
 
@@ -239,18 +238,3 @@ console.log(combinations);
         });
     return filterdData
 }
-
-/*
-*
-*
-* filterdData = {
-  computers: [
-    item,
-    item,
-  ]
-}
-
-filterdData.computers.push(item)
-
-
-*/
